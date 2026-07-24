@@ -122,13 +122,28 @@ outfitInput.addEventListener("keydown", (e) => {
   }
 });
 
+// Some mobile browsers (notably iOS) don't reliably honor the geolocation
+// API's own `timeout` option once permission is already granted — the call
+// can hang indefinitely with neither callback ever firing. Race the whole
+// location+weather sequence against a hard timeout so the page always
+// falls back to something instead of staying stuck on the loading state.
+function withTimeout(promise, ms, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms)
+    ),
+  ]);
+}
+
 async function init() {
   try {
-    const { lat, lon } = await getPosition();
-    const [city, weather] = await Promise.all([
-      reverseGeocode(lat, lon),
-      getForecast(lat, lon),
-    ]);
+    const { lat, lon } = await withTimeout(getPosition(), 12000, "Geolocation");
+    const [city, weather] = await withTimeout(
+      Promise.all([reverseGeocode(lat, lon), getForecast(lat, lon)]),
+      12000,
+      "Weather lookup"
+    );
 
     tempDisplay.innerHTML = `${weather.tempF}°<span class="hi-lo">H:${weather.highF}° L:${weather.lowF}°</span>`;
     cityDisplay.textContent = city;
