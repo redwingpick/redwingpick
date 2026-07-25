@@ -198,6 +198,12 @@ async function init() {
       showError(
         "Location access was denied. Allow location permission for this site and reload to get weather-based picks."
       );
+    } else if (err && err.code === 2) {
+      showError(
+        "Your device couldn't determine a physical location (permission was granted, but the location itself is unavailable). On a Mac, check System Settings → Privacy & Security → Location Services is on, and that Wi-Fi is turned on even if you're using Ethernet."
+      );
+    } else if (err && err.code === 3) {
+      showError("Location request timed out. Reload to try again.");
     } else {
       showError("Something went wrong fetching weather: " + (err.message || err));
     }
