@@ -1,9 +1,11 @@
 :root {
-  --leather: #7a3b1e;
-  --leather-dark: #4a2412;
-  --cream: #f7f1e6;
-  --ink: #2b2320;
-  --muted: #6b6058;
+  --red: #d9364a;
+  --red-dark: #b82c3c;
+  --ink: #201d24;
+  --muted: #6b6e73;
+  --bg: #ffffff;
+  --bg-soft: #f4f4f4;
+  --border: #e2e2e2;
 }
 
 * {
@@ -14,9 +16,9 @@ html, body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  background: var(--cream);
+  background: var(--bg);
   color: var(--ink);
-  font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-family: "Archivo", Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -24,12 +26,12 @@ body {
   overflow-x: hidden;
 }
 
-/* Red Wing logo, shown once, large, centered, at 8% opacity so body text stays readable over it */
+/* Red Wing logo, shown once, large, centered, at low opacity so body text stays readable over it */
 .bg-pattern {
   position: fixed;
   inset: 0;
   z-index: 0;
-  opacity: 0.08;
+  opacity: 0.06;
   pointer-events: none;
   background-image: url('images/redwing-logo.png');
   background-repeat: no-repeat;
@@ -43,14 +45,17 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 28px 40px 10px;
+  padding: 28px 40px 14px;
+  border-bottom: 1px solid var(--border);
 }
 
 .title-block h1 {
-  font-size: 1.9rem;
+  font-size: 1.7rem;
+  font-weight: 800;
   margin: 0;
-  letter-spacing: 0.02em;
-  color: var(--leather-dark);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
 }
 
 .weather-block {
@@ -60,22 +65,26 @@ body {
 
 .temp {
   font-size: 2.6rem;
-  font-weight: 700;
-  color: var(--leather-dark);
+  font-weight: 800;
+  color: var(--ink);
 }
 
 .temp .hi-lo {
   display: block;
-  font-size: 0.95rem;
-  font-weight: 400;
+  font-size: 0.9rem;
+  font-weight: 500;
   color: var(--muted);
-  margin-top: 2px;
+  margin-top: 4px;
+  letter-spacing: 0.02em;
 }
 
 .city {
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   color: var(--muted);
-  margin-top: 2px;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 main {
@@ -83,14 +92,15 @@ main {
   z-index: 1;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 10px 40px 60px;
+  padding: 20px 40px 60px;
 }
 
 .intro {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   line-height: 1.6;
   max-width: 900px;
-  margin: 10px 0 40px;
+  margin: 10px 0 44px;
+  color: var(--ink);
 }
 
 .error {
@@ -99,7 +109,7 @@ main {
   max-width: 900px;
   margin: 0 auto 30px;
   padding: 0 40px;
-  color: #a33;
+  color: var(--red-dark);
 }
 
 /* 3 choices x 3 rows, borderless columns */
@@ -115,7 +125,7 @@ main {
   gap: 24px;
   align-items: start;
   padding-bottom: 30px;
-  border-bottom: 1px solid rgba(74, 36, 18, 0.15);
+  border-bottom: 1px solid var(--border);
 }
 
 .choice-row:last-child {
@@ -123,10 +133,12 @@ main {
 }
 
 .choice-label {
-  font-size: 1.3rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--leather-dark);
+  color: var(--red);
   padding-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .choice-image-col {
@@ -139,8 +151,8 @@ main {
   max-width: 220px;
   height: 180px;
   object-fit: cover;
-  border-radius: 8px;
-  background: rgba(74, 36, 18, 0.08);
+  border-radius: 4px;
+  background: var(--bg-soft);
 }
 
 .placeholder {
@@ -151,6 +163,7 @@ main {
   font-size: 0.85rem;
   padding: 10px;
   text-align: center;
+  border: 1px solid var(--border);
 }
 
 .shoe-name {
@@ -160,7 +173,9 @@ main {
 
 .shoe-model {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .narrative-col {
@@ -171,15 +186,17 @@ main {
 .custom-outfit {
   margin-top: 20px;
   padding-top: 30px;
-  border-top: 1px solid rgba(74, 36, 18, 0.15);
+  border-top: 1px solid var(--border);
 }
 
 .custom-outfit label {
   display: block;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--leather-dark);
+  color: var(--ink);
   margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .custom-outfit-row {
@@ -193,28 +210,30 @@ main {
   font-family: inherit;
   font-size: 1rem;
   padding: 10px 12px;
-  border: 1px solid rgba(74, 36, 18, 0.3);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
   color: var(--ink);
   resize: vertical;
 }
 
 .custom-outfit button {
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  padding: 10px 20px;
+  padding: 10px 24px;
   border: none;
-  border-radius: 6px;
-  background: var(--leather-dark);
-  color: var(--cream);
+  border-radius: 4px;
+  background: var(--ink);
+  color: #ffffff;
   cursor: pointer;
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .custom-outfit button:hover {
-  background: var(--leather);
+  background: var(--red);
 }
 
 #customPickResult {
@@ -223,7 +242,7 @@ main {
 
 @media (max-width: 760px) {
   .top-bar {
-    padding: 20px 20px 6px;
+    padding: 20px 20px 12px;
   }
   main {
     padding: 10px 20px 40px;
