@@ -2,6 +2,7 @@ import { BOOTS } from "./boots.js";
 import { getPosition, reverseGeocode, getForecast } from "./weather.js";
 import { pickForToday, buildNarrative, todayKey, yesterdayKey } from "./picker.js";
 import { matchOutfitToBoot } from "./outfitMatch.js";
+import { NON_RED_WING_FOOTWEAR } from "./nonRedWingFootwear.js";
 
 const pageTitle = document.getElementById("pageTitle");
 const tempDisplay = document.getElementById("tempDisplay");
@@ -15,8 +16,9 @@ const customPickResult = document.getElementById("customPickResult");
 
 const CHOICE_LABELS = ["Top Choice", "Second Choice", "Third Choice"];
 
-// Falls back to the calendar month until a real forecast sets this.
+// Falls back to the calendar month/null weather until a real forecast sets these.
 let currentMonth = new Date().getMonth() + 1;
+let currentWeather = null;
 
 function showError(message) {
   errorMessage.textContent = message;
@@ -81,7 +83,7 @@ function buildChoiceRow(label, boot, narrativeText) {
   shoeName.textContent = boot.name;
   const shoeModel = document.createElement("div");
   shoeModel.className = "shoe-model";
-  shoeModel.textContent = `#${boot.model}`;
+  shoeModel.textContent = boot.isRedWing === false ? boot.brand : `#${boot.model}`;
   imageCol.append(img, shoeName, shoeModel);
 
   const narrativeCol = document.createElement("div");
@@ -103,19 +105,25 @@ function renderChoices(picks) {
 // stays server-side. Throws on any failure — caller falls back to the local
 // keyword matcher (e.g. running via plain http.server with no functions,
 // network down, or the function/key isn't set up yet).
-async function requestAIMatch(text, month) {
+async function requestAIMatch(text, month, weather) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
   try {
     const res = await fetch("/api/match-outfit", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ outfitText: text, month }),
+      body: JSON.stringify({
+        outfitText: text,
+        month,
+        highF: weather?.highF,
+        rainIn: weather?.rainIn,
+        precipChancePct: weather?.precipChancePct,
+      }),
       signal: controller.signal,
     });
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || `Request failed: ${res.status}`);
-    const boot = BOOTS.find((b) => b.id === data.bootId);
+    const boot = [...BOOTS, ...NON_RED_WING_FOOTWEAR].find((b) => b.id === data.bootId);
     if (!boot) throw new Error("Unknown bootId from AI: " + data.bootId);
     return { boot, reasoning: data.reasoning };
   } finally {
@@ -133,11 +141,11 @@ async function handleOutfitSubmit() {
   customPickResult.hidden = false;
 
   try {
-    const { boot, reasoning } = await requestAIMatch(text, currentMonth);
+    const { boot, reasoning } = await requestAIMatch(text, currentMonth, currentWeather);
     customPickResult.appendChild(buildChoiceRow("New Choice of the Day", boot, reasoning));
   } catch (err) {
     console.warn("AI match unavailable, falling back to keyword match:", err);
-    const result = matchOutfitToBoot(BOOTS, currentMonth, text);
+    const result = matchOutfitToBoot(BOOTS, currentMonth, text, currentWeather);
     const prefix = "(AI unavailable, matched by keyword instead) ";
     const narrative = result.matchedAnything
       ? `${prefix}Based on what you described (matched: ${result.matchedTerms.join(", ")}), this is the closest pair in the collection — ${result.boot.signature.toLowerCase()}.`
@@ -184,6 +192,7 @@ async function init() {
     tempDisplay.innerHTML = `${weather.tempF}°<span class="hi-lo">H:${weather.highF}° L:${weather.lowF}°</span>`;
     cityDisplay.textContent = city;
     currentMonth = weather.month;
+    currentWeather = weather;
 
     const picks = pickForTodayAvoidingRepeat(weather);
     introParagraph.textContent = buildNarrative(weather, city, picks);
@@ -223,6 +232,7 @@ async function init() {
       conditionText: "unknown conditions",
       month: new Date().getMonth() + 1,
     };
+    currentWeather = fallbackWeather;
     const picks = pickForTodayAvoidingRepeat(fallbackWeather);
     renderChoices(picks);
   }

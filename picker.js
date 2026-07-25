@@ -2,6 +2,8 @@
 // weighted by Kirk's ranking, with a date-seeded jitter so the #1 pick
 // doesn't lock to the same boot every single day when several are equally suitable.
 
+import { NON_RED_WING_FOOTWEAR } from "./nonRedWingFootwear.js";
+
 function hashToUnit(str) {
   // djb2 hash, normalized to [0, 1)
   let hash = 5381;
@@ -23,6 +25,7 @@ export function yesterdayKey() {
 }
 
 const HOT_DAY_THRESHOLD_F = 80; // "very warm/sunny" — shorts-weather territory
+const REALLY_HOT_THIRD_CHOICE_F = 85; // above this, Third Choice can go non-Red-Wing
 const HEAVY_RAIN_OVERRIDE_PCT = 80; // above this chance of rain, don't force shorts-only mode
 const HEAVY_RAIN_OVERRIDE_IN = 0.3; // or a substantial daily rain total (proxy for all-day rain)
 
@@ -137,7 +140,36 @@ export function pickForToday(boots, weather, options = {}) {
     [scored[0], scored[1]] = [scored[1], scored[0]];
   }
 
-  return scored.slice(0, 3).map((s) => s.boot);
+  const top3 = scored.slice(0, 3).map((s) => s.boot);
+
+  // On really hot days, Third Choice is up for grabs between the two
+  // shorts-compatible boots and two non-Red-Wing warm-weather options —
+  // "are you sure you want Red Wings today?" — but boots can still win.
+  if (weather.highF >= REALLY_HOT_THIRD_CHOICE_F && !heavyRainOverride) {
+    const alreadyChosenIds = new Set([top3[0].id, top3[1].id]);
+    const shortsBoots = boots.filter(
+      (b) => b.tags.includes("shorts") && !alreadyChosenIds.has(b.id)
+    );
+    const altCandidates = [...NON_RED_WING_FOOTWEAR, ...shortsBoots].filter(
+      (item) => !alreadyChosenIds.has(item.id)
+    );
+
+    if (altCandidates.length > 0) {
+      const altScored = altCandidates.map((item) => {
+        const rankWeight = item.isRedWing === false ? 6 : (15 - item.rank) * 1.5;
+        const jitter = (hashToUnit(dateKey + item.id + "-third-choice") - 0.5) * 16;
+        const base =
+          tempFitScore(item, weather.lowF, weather.highF) * 0.4 +
+          precipScore(item, weather) * 0.35 +
+          extremeTempScore(item, weather.lowF, weather.highF) * 0.25;
+        return { item, score: base + rankWeight + jitter };
+      });
+      altScored.sort((a, b) => b.score - a.score);
+      top3[2] = altScored[0].item;
+    }
+  }
+
+  return top3;
 }
 
 export function buildNarrative(weather, city, picks) {
@@ -174,5 +206,10 @@ export function buildNarrative(weather, city, picks) {
   else if (weather.lowF <= 25) reasonBits.push("real cold-weather protection");
   else reasonBits.push("whatever's most versatile for a day like this");
 
-  return `Today in ${city} is calling for a high of ${weather.highF}°F and a low of ${weather.lowF}°F, ${weather.conditionText}${wetNote} (right now it's ${weather.tempF}°F, feels like ${weather.feelsLikeF}°F). That range points toward ${reasonBits[0]}, which is why the ${top.name} takes the top spot today, backed up by the ${picks[1].name} and the ${picks[2].name} as strong alternates from the collection.`;
+  const secondThirdMention =
+    picks[2].isRedWing === false
+      ? `backed up by the ${picks[1].name} as a strong alternate — though honestly, on a day this hot, the ${picks[2].name} might be the smarter move over another boot`
+      : `backed up by the ${picks[1].name} and the ${picks[2].name} as strong alternates from the collection`;
+
+  return `Today in ${city} is calling for a high of ${weather.highF}°F and a low of ${weather.lowF}°F, ${weather.conditionText}${wetNote} (right now it's ${weather.tempF}°F, feels like ${weather.feelsLikeF}°F). That range points toward ${reasonBits[0]}, which is why the ${top.name} takes the top spot today, ${secondThirdMention}.`;
 }

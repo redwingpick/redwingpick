@@ -2,6 +2,10 @@
 // against each boot's outfit profile, using simple keyword overlap plus a
 // few formality/shorts heuristics. No external API — pure text matching.
 
+import { NON_RED_WING_FOOTWEAR } from "./nonRedWingFootwear.js";
+
+const REALLY_REALLY_HOT_F = 90; // only this hot does a non-Red-Wing suggestion even enter the pool
+
 const DRESSY_PATTERN =
   /\b(button-down|button down|oxford shirt|sport coat|blazer|suit|dress shirt|slacks|trousers|quarter-zip|quarter zip|tie|dress pants|crisp shirt)\b/;
 const CASUAL_PATTERN =
@@ -38,12 +42,16 @@ function buildKeywordWeights(pool) {
   return weights;
 }
 
-export function matchOutfitToBoot(boots, month, rawText) {
+export function matchOutfitToBoot(boots, month, rawText, weather) {
   const text = rawText.trim().toLowerCase();
   if (!text) return null;
 
   const inSeason = boots.filter((b) => seasonAllowed(b, month));
-  const pool = inSeason.length ? inSeason : boots;
+  const basePool = inSeason.length ? inSeason : boots;
+  // Only on really, really hot days does a non-Red-Wing option even become
+  // eligible — and even then only wins if the outfit's keywords favor it.
+  const reallyReallyHot = weather && weather.highF >= REALLY_REALLY_HOT_F;
+  const pool = reallyReallyHot ? [...basePool, ...NON_RED_WING_FOOTWEAR] : basePool;
   const keywordWeights = buildKeywordWeights(pool);
 
   const dressySignal = DRESSY_PATTERN.test(text);
@@ -86,7 +94,7 @@ export function matchOutfitToBoot(boots, month, rawText) {
     return { boot, score, matched };
   });
 
-  scored.sort((a, b) => b.score - a.score || a.boot.rank - b.boot.rank);
+  scored.sort((a, b) => b.score - a.score || (a.boot.rank ?? 99) - (b.boot.rank ?? 99));
   const best = scored[0];
 
   return {
