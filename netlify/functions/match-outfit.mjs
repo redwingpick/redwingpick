@@ -71,7 +71,7 @@ ${JSON.stringify(catalog, null, 2)}
 Kirk's wardrobe outside of Red Wing boots (JSON) — the outfit description may name specific pieces from this list by brand/model. Use it to infer color, fabric, and formality when a named piece isn't self-explanatory (e.g. knowing "Hammer Made Banff" is a shirt, or that a jacket is waxed canvas vs. quilted):
 ${JSON.stringify(WARDROBE, null, 2)}
 
-Consider color, type of pants, sleeve length, and type of shirt mentioned in the outfit. Prefer boots where "inSeasonRightNow" is true unless nothing else fits meaningfully better. Pick exactly one boot by its "id" and explain your choice in 1-2 sentences referencing the specific outfit details that drove it — naming the actual wardrobe piece if one was mentioned.`;
+Consider color, type of pants, sleeve length, and type of shirt mentioned in the outfit. When the outfit is built around black clothing, lean toward black or grey boots (leather field mentions "Black" or "Grey") — only pick a brown/tan/copper boot in that case if it genuinely works better than the black/grey options, and say why. Prefer boots where "inSeasonRightNow" is true unless nothing else fits meaningfully better. Pick exactly one boot by its "id" and explain your choice in 1-2 sentences referencing the specific outfit details that drove it — naming the actual wardrobe piece if one was mentioned.`;
 
   let anthropicRes;
   try {

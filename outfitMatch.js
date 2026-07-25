@@ -7,11 +7,17 @@ const DRESSY_PATTERN =
 const CASUAL_PATTERN =
   /\b(flannel|tee|t-shirt|hoodie|sweatpants|joggers|henley|canvas jacket|jeans|denim)\b/;
 const SHORTS_PATTERN = /\bshorts\b/;
+const BLACK_OUTFIT_PATTERN = /\bblack\b/;
 const SHORT_SLEEVE_PATTERN = /\b(short[\s-]?sleeve|short sleeved)\b/;
 const LONG_SLEEVE_PATTERN = /\b(long[\s-]?sleeve|long sleeved)\b/;
 
 function seasonAllowed(boot, month) {
   return !boot.allowedMonths || boot.allowedMonths.includes(month);
+}
+
+function isBlackOrGreyLeather(boot) {
+  const leather = boot.leather.toLowerCase();
+  return leather.includes("black") || leather.includes("grey") || leather.includes("gray");
 }
 
 // Keywords shared by most boots (e.g. "denim") barely tell pairs apart; rare,
@@ -43,6 +49,7 @@ export function matchOutfitToBoot(boots, month, rawText) {
   const dressySignal = DRESSY_PATTERN.test(text);
   const casualSignal = CASUAL_PATTERN.test(text);
   const shortsSignal = SHORTS_PATTERN.test(text);
+  const blackOutfitSignal = BLACK_OUTFIT_PATTERN.test(text);
   const shortSleeveSignal = SHORT_SLEEVE_PATTERN.test(text);
   const longSleeveSignal = LONG_SLEEVE_PATTERN.test(text);
 
@@ -63,6 +70,11 @@ export function matchOutfitToBoot(boots, month, rawText) {
     if (casualSignal && boot.tags.includes("casual")) score += 0.5;
     if (shortsSignal) {
       score += boot.tags.includes("shorts") ? 4 : boot.tags.includes("hot-ok") ? 1 : -3;
+    }
+    // Wearing black leans toward black/grey boots. Brown isn't ruled out —
+    // it just needs strong specific keyword matches to overcome the nudge.
+    if (blackOutfitSignal) {
+      score += isBlackOrGreyLeather(boot) ? 3 : -2;
     }
     // Short sleeves read as warmer/more casual; long sleeves as cooler/dressier —
     // nudge toward boots already suited to those conditions.

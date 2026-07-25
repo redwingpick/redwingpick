@@ -22,7 +22,9 @@ export function yesterdayKey() {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
-const HOT_DAY_THRESHOLD_F = 85; // "very warm/sunny" — shorts-weather territory
+const HOT_DAY_THRESHOLD_F = 80; // "very warm/sunny" — shorts-weather territory
+const HEAVY_RAIN_OVERRIDE_PCT = 80; // above this chance of rain, don't force shorts-only mode
+const HEAVY_RAIN_OVERRIDE_IN = 0.3; // or a substantial daily rain total (proxy for all-day rain)
 
 function isWetDay(weather) {
   return (
@@ -88,14 +90,17 @@ export function pickForToday(boots, weather, options = {}) {
   const { excludeFromTop } = options;
   const dateKey = todayKey();
   const month = weather.month;
-  const veryHot = weather.highF >= HOT_DAY_THRESHOLD_F;
   const wet = isWetDay(weather);
   const snowy = isSnowyDay(weather);
+  const heavyRainOverride =
+    weather.precipChancePct > HEAVY_RAIN_OVERRIDE_PCT || weather.rainIn > HEAVY_RAIN_OVERRIDE_IN;
+  const veryHot = weather.highF >= HOT_DAY_THRESHOLD_F && !heavyRainOverride;
 
   let pool;
   if (veryHot) {
     // Very warm/sunny days mean shorts weather — only genuine hot-weather
-    // pairs are in rotation, full stop, regardless of rank or season.
+    // pairs are in rotation, full stop, regardless of rank or season. Skipped
+    // entirely when heavy rain is expected, even on a hot day.
     pool = boots.filter((b) => b.tags.includes("hot-ok"));
   } else {
     const inSeason = boots.filter((b) => seasonAllowed(b, month));
@@ -151,7 +156,9 @@ export function buildNarrative(weather, city, picks) {
 
   const isSnowing = isSnowyDay(weather);
   const isWet = isWetDay(weather);
-  const veryHot = weather.highF >= HOT_DAY_THRESHOLD_F;
+  const heavyRainOverride =
+    weather.precipChancePct > HEAVY_RAIN_OVERRIDE_PCT || weather.rainIn > HEAVY_RAIN_OVERRIDE_IN;
+  const veryHot = weather.highF >= HOT_DAY_THRESHOLD_F && !heavyRainOverride;
 
   const wetNote = isSnowing
     ? " with snow likely"
