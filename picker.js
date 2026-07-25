@@ -11,8 +11,14 @@ function hashToUnit(str) {
   return ((hash >>> 0) % 10000) / 10000;
 }
 
-function todayKey() {
+export function todayKey() {
   const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+}
+
+export function yesterdayKey() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
@@ -78,7 +84,8 @@ function seasonAllowed(boot, month) {
   return !boot.allowedMonths || boot.allowedMonths.includes(month);
 }
 
-export function pickForToday(boots, weather) {
+export function pickForToday(boots, weather, options = {}) {
+  const { excludeFromTop } = options;
   const dateKey = todayKey();
   const month = weather.month;
   const veryHot = weather.highF >= HOT_DAY_THRESHOLD_F;
@@ -118,6 +125,13 @@ export function pickForToday(boots, weather) {
   });
 
   scored.sort((a, b) => b.score - a.score);
+
+  // Never repeat yesterday's #1 pick as today's #1 — demote it to #2 instead
+  // of dropping it, so the group of 3 stays otherwise unchanged.
+  if (excludeFromTop && scored[0]?.boot.id === excludeFromTop && scored.length > 1) {
+    [scored[0], scored[1]] = [scored[1], scored[0]];
+  }
+
   return scored.slice(0, 3).map((s) => s.boot);
 }
 

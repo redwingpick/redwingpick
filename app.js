@@ -1,8 +1,9 @@
 import { BOOTS } from "./boots.js";
 import { getPosition, reverseGeocode, getForecast } from "./weather.js";
-import { pickForToday, buildNarrative } from "./picker.js";
+import { pickForToday, buildNarrative, todayKey, yesterdayKey } from "./picker.js";
 import { matchOutfitToBoot } from "./outfitMatch.js";
 
+const pageTitle = document.getElementById("pageTitle");
 const tempDisplay = document.getElementById("tempDisplay");
 const cityDisplay = document.getElementById("cityDisplay");
 const introParagraph = document.getElementById("introParagraph");
@@ -20,6 +21,40 @@ let currentMonth = new Date().getMonth() + 1;
 function showError(message) {
   errorMessage.textContent = message;
   errorMessage.hidden = false;
+}
+
+function renderTitleDate() {
+  const dateStr = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" });
+  pageTitle.textContent = `Red Wing Pick for ${dateStr}`;
+}
+
+// Remembers yesterday's #1 pick (per browser/device — there's no shared
+// backend) so pickForToday can avoid repeating it today.
+const LAST_TOP_PICK_KEY = "redwingpick:lastTopPick";
+
+function getLastTopPick() {
+  try {
+    const raw = localStorage.getItem(LAST_TOP_PICK_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function rememberTopPick(bootId) {
+  try {
+    localStorage.setItem(LAST_TOP_PICK_KEY, JSON.stringify({ date: todayKey(), bootId }));
+  } catch {
+    // ignore — worst case it just won't remember across reloads
+  }
+}
+
+function pickForTodayAvoidingRepeat(weather) {
+  const last = getLastTopPick();
+  const excludeFromTop = last && last.date === yesterdayKey() ? last.bootId : null;
+  const picks = pickForToday(BOOTS, weather, { excludeFromTop });
+  rememberTopPick(picks[0].id);
+  return picks;
 }
 
 function buildChoiceRow(label, boot, narrativeText) {
@@ -137,6 +172,7 @@ function withTimeout(promise, ms, label) {
 }
 
 async function init() {
+  renderTitleDate();
   try {
     const { lat, lon } = await withTimeout(getPosition(), 12000, "Geolocation");
     const [city, weather] = await withTimeout(
@@ -149,7 +185,7 @@ async function init() {
     cityDisplay.textContent = city;
     currentMonth = weather.month;
 
-    const picks = pickForToday(BOOTS, weather);
+    const picks = pickForTodayAvoidingRepeat(weather);
     introParagraph.textContent = buildNarrative(weather, city, picks);
     renderChoices(picks);
   } catch (err) {
@@ -181,7 +217,7 @@ async function init() {
       conditionText: "unknown conditions",
       month: new Date().getMonth() + 1,
     };
-    const picks = pickForToday(BOOTS, fallbackWeather);
+    const picks = pickForTodayAvoidingRepeat(fallbackWeather);
     renderChoices(picks);
   }
 }
