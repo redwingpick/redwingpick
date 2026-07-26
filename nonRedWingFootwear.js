@@ -37,4 +37,20 @@ export const NON_RED_WING_FOOTWEAR = [
       "Are you sure you want Red Wings today? White adidas VL Court sneakers with shorts and a tee is the smarter, cooler move on a day like this.",
     matchKeywords: ["sneakers", "white sneakers", "adidas", "tee", "t-shirt", "joggers", "shorts", "athleisure"],
   },
+  {
+    id: "adidas-daily-3-blue",
+    isRedWing: false,
+    brand: "adidas",
+    model: "Daily 3.0",
+    name: "adidas Daily 3.0 Sneaker (Navy Blue)",
+    leather: "Navy canvas sneaker",
+    allowedMonths: [5, 6, 7, 8, 9],
+    idealTempF: [80, 105],
+    tags: ["hot-ok", "shorts", "casual"],
+    signature: "Casual navy sneaker alternative",
+    limiter: "Not a boot — only makes sense on genuinely hot, casual days",
+    outfit:
+      "Are you sure you want Red Wings today? The adidas Daily 3.0 in navy is a clean, low-key sneaker for a laid-back hot day — jeans or shorts and a simple tee, nothing more needed.",
+    matchKeywords: ["sneakers", "navy sneakers", "adidas", "tee", "t-shirt", "jeans", "shorts", "casual"],
+  },
 ];

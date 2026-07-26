@@ -76,7 +76,7 @@ export const WARDROBE = {
     "Greg Norman Shorts (Navy)",
   ],
   footwearNonRedWing: {
-    sneakers: ["adidas VL Court 3.0 (White / Black)"],
+    sneakers: ["adidas VL Court 3.0 (White / Black)", "adidas Daily 3.0 Sneaker (Navy Blue)"],
     sandals: ["Birkenstock Kyoto (Desert Buck Nubuck)"],
   },
   eyewear: {
