@@ -19,7 +19,7 @@ html, body {
   min-height: 100%;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Archivo", Helvetica, Arial, sans-serif;
+  font-family: "Lato", Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -53,13 +53,15 @@ body {
 }
 
 .title-block h1 {
-  font-size: clamp(1.15rem, 4vw, 2rem);
-  font-weight: 900;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.25rem, 4.2vw, 2.1rem);
+  font-weight: 800;
+  font-style: normal;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: #ffffff;
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .weather-block {
@@ -196,12 +198,13 @@ main {
 
 .custom-outfit label {
   display: block;
-  font-size: 1rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--ink);
   margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .custom-outfit-row {
