@@ -198,10 +198,14 @@ export function buildNarrative(weather, city, picks) {
     ? ` with a ${weather.precipChancePct}% chance of rain`
     : "";
 
+  // This order must mirror pickForToday's actual precedence (veryHot is
+  // decided before any wet/snow exclusion is even considered there), or the
+  // narrative can claim something the picks contradict — e.g. saying
+  // "oxfords are off the table" while the hot-day pool is 100% oxfords.
   const reasonBits = [];
-  if (isSnowing) reasonBits.push("something that can handle snow underfoot — oxfords are off the table entirely");
-  else if (isWet) reasonBits.push("a boot that won't flinch at wet pavement — oxfords are off the table entirely");
+  if (isSnowing && !veryHot) reasonBits.push("something that can handle snow underfoot — oxfords are off the table entirely");
   else if (veryHot) reasonBits.push("something built for genuine shorts-weather heat, which narrows things down fast");
+  else if (isWet) reasonBits.push("a boot that won't flinch at wet pavement — oxfords are off the table entirely");
   else if (weather.highF >= 78) reasonBits.push("something breathable enough for genuine heat");
   else if (weather.lowF <= 25) reasonBits.push("real cold-weather protection");
   else reasonBits.push("whatever's most versatile for a day like this");
