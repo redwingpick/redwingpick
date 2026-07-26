@@ -8,7 +8,7 @@ import { NON_RED_WING_FOOTWEAR } from "../../nonRedWingFootwear.js";
 
 const MODEL = "claude-haiku-4-5-20251001";
 const MAX_OUTFIT_LENGTH = 500;
-const REALLY_REALLY_HOT_F = 90; // only this hot does a non-Red-Wing suggestion even enter the catalog
+const REALLY_REALLY_HOT_F = 80; // only this hot does a non-Red-Wing suggestion even enter the catalog
 
 function seasonAllowed(boot, month) {
   return !boot.allowedMonths || boot.allowedMonths.includes(month);
@@ -83,7 +83,12 @@ export default async (req) => {
   const nonRedWingEligible = typeof highF === "number" && highF >= REALLY_REALLY_HOT_F;
 
   const nonRedWingInstruction = nonRedWingEligible
-    ? `\n\nToday's high is ${highF}°F — really, really hot. The catalog includes two non-Red-Wing items (isRedWing:false: Birkenstock Kyoto sandals, adidas VL Court sneakers) as options. Only pick one of these over a boot if the outfit described is genuinely casual/summery and one of them is a clearly better fit than any boot — otherwise a Red Wing boot should still win. Don't reach for the non-Red-Wing options just because it's hot; the outfit has to actually call for them.`
+    ? `\n\nToday's high is ${highF}°F. The catalog includes non-Red-Wing items (isRedWing:false: Birkenstock Kyoto sandals, adidas VL Court 3.0 sneakers, adidas Daily 3.0 sneakers) as options. Don't reach for these just because it's hot — only pick one when the outfit specifically calls for it, per these two style rules:
+
+1. If the outfit reads athletic/athleisure (athletic shorts, performance fabric, sporty or gym vibe) paired with shorts, strongly prefer the adidas sneakers or the Birkenstock Kyoto over any Red Wing boot.
+2. If the outfit is trendier/smart-casual (e.g. a button-down or collared shirt) and NOT black, paired with shorts, prefer one of the two shorts-compatible Red Wings (8079 Shop Moc Oxford or 3604 Weekender) — unless today's high is over 80°F, in which case the Birkenstock Kyoto is the better call instead.
+
+For any other shorts outfit that doesn't clearly match either style, use your judgment between the shorts-compatible Red Wings and the non-Red-Wing options.`
     : "";
 
   const prompt = `You are picking the single best-matching boot from Kirk's Red Wing collection for a described outfit.

@@ -4,7 +4,8 @@
 
 import { NON_RED_WING_FOOTWEAR } from "./nonRedWingFootwear.js";
 
-const REALLY_REALLY_HOT_F = 90; // only this hot does a non-Red-Wing suggestion even enter the pool
+const REALLY_REALLY_HOT_F = 80; // only this hot does a non-Red-Wing suggestion even enter the pool
+const BIRKENSTOCK_SHORTS_THRESHOLD_F = 80; // above this, smart-casual shorts outfits lean Birkenstock
 
 const DRESSY_PATTERN =
   /\b(button-down|button down|oxford shirt|sport coat|blazer|suit|dress shirt|slacks|trousers|quarter-zip|quarter zip|tie|dress pants|crisp shirt)\b/;
@@ -12,8 +13,12 @@ const CASUAL_PATTERN =
   /\b(flannel|tee|t-shirt|hoodie|sweatpants|joggers|henley|canvas jacket|jeans|denim)\b/;
 const SHORTS_PATTERN = /\bshorts\b/;
 const BLACK_OUTFIT_PATTERN = /\bblack\b/;
+const ATHLETIC_PATTERN = /\b(athletic|athleisure|sporty|performance|gym|track jacket|running)\b/;
 const SHORT_SLEEVE_PATTERN = /\b(short[\s-]?sleeve|short sleeved)\b/;
 const LONG_SLEEVE_PATTERN = /\b(long[\s-]?sleeve|long sleeved)\b/;
+
+const SHORTS_FRIENDLY_RW_IDS = ["8079-abilene-moc", "3604-weekender"];
+const ADIDAS_IDS = ["adidas-vl-court", "adidas-daily-3-blue"];
 
 function seasonAllowed(boot, month) {
   return !boot.allowedMonths || boot.allowedMonths.includes(month);
@@ -58,8 +63,11 @@ export function matchOutfitToBoot(boots, month, rawText, weather) {
   const casualSignal = CASUAL_PATTERN.test(text);
   const shortsSignal = SHORTS_PATTERN.test(text);
   const blackOutfitSignal = BLACK_OUTFIT_PATTERN.test(text);
+  const athleticSignal = ATHLETIC_PATTERN.test(text);
   const shortSleeveSignal = SHORT_SLEEVE_PATTERN.test(text);
   const longSleeveSignal = LONG_SLEEVE_PATTERN.test(text);
+  const smartCasualShorts = shortsSignal && !athleticSignal && dressySignal && !blackOutfitSignal;
+  const birkenstockWeather = weather && weather.highF > BIRKENSTOCK_SHORTS_THRESHOLD_F;
 
   const scored = pool.map((boot) => {
     let score = 0;
@@ -89,6 +97,18 @@ export function matchOutfitToBoot(boots, month, rawText, weather) {
     if (shortSleeveSignal && boot.tags.includes("hot-ok")) score += 0.5;
     if (longSleeveSignal && (boot.tags.includes("cold-ok") || boot.tags.includes("dress"))) {
       score += 0.5;
+    }
+    // Athletic/athleisure shorts outfits strongly favor adidas or Birkenstock
+    // over any Red Wing, including the shorts-compatible ones.
+    if (shortsSignal && athleticSignal && (ADIDAS_IDS.includes(boot.id) || boot.id === "birkenstock-kyoto")) {
+      score += 6;
+    }
+    // Trendier, non-black shorts outfit (e.g. a button-down): the two
+    // shorts-friendly Red Wings are the default call, but Birkenstock takes
+    // over once it's genuinely hot (>80°F).
+    if (smartCasualShorts) {
+      if (SHORTS_FRIENDLY_RW_IDS.includes(boot.id)) score += 5;
+      if (birkenstockWeather && boot.id === "birkenstock-kyoto") score += 7;
     }
 
     return { boot, score, matched };
