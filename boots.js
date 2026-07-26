@@ -24,7 +24,7 @@ export const BOOTS = [
     tags: ["wet-ok", "casual", "dress"],
     signature: "Does everything well",
     limiter: "None",
-    outfit: "This is the one boot that doesn't ask you to think twice: raw or dark denim, a henley or flannel, and a canvas jacket if it's cool out. It goes from errands to dinner without changing anything else you're wearing.",
+    outfit: "This is the one boot that doesn't ask you to think twice: The Perfect Jean in Cowboy Wash, the Jockey Outdoor Luke Bryan Henley or a Hammer Made Custer, and the Iron & Resin Hunter Jacket if it's cool out. It goes from errands to dinner without changing anything else you're wearing.",
     matchKeywords: ["denim", "jeans", "dark denim", "raw denim", "henley", "flannel", "canvas jacket"],
   },
   {
@@ -38,7 +38,7 @@ export const BOOTS = [
     tags: ["wet-ok", "casual", "dress"],
     signature: "10-yr sentiment + versatility",
     limiter: "Lower collectibility",
-    outfit: "Grey chukkas want a slightly dressed-up base: slim chinos or grey trousers, a chambray or oxford shirt, and a lightweight quarter-zip or unstructured blazer. Jeans work too if you cuff them.",
+    outfit: "Grey chukkas want a slightly dressed-up base: the Banana Republic Athletic Travel Pant or Big Star Union, a J.Crew Gauze Chambray or Brooks Brothers Button Down, and the Marine Layer Corbet Quilted Full Zip if it's cool. The Perfect Jean works too if you cuff them.",
     matchKeywords: ["chinos", "grey", "gray", "trousers", "chambray", "oxford shirt", "quarter-zip", "quarter zip", "blazer", "jeans"],
   },
   {
@@ -52,7 +52,7 @@ export const BOOTS = [
     tags: ["dry-only", "casual", "dress", "hot-ok"],
     signature: "Cool factor + collectibility",
     limiter: "Weather-restricted",
-    outfit: "Keep it dry-weather and let the boot be the statement: slim taper denim or cropped trousers, a plain tee under an overshirt, minimal jewelry. Don't compete with it — everything else should be quiet.",
+    outfit: "Keep it dry-weather and let the boot be the statement: Uniqlo Selvedge Jeans or The Perfect Jean, a Marine Layer Banks Tee under the Marine Layer Pacifica Stretch Twill Overshirt, minimal jewelry. Don't compete with it — everything else should be quiet.",
     matchKeywords: ["denim", "slim denim", "cropped trousers", "tee", "t-shirt", "overshirt", "copper"],
   },
   {
@@ -66,7 +66,7 @@ export const BOOTS = [
     tags: ["wet-ok", "snow-ok", "cold-ok", "casual"],
     signature: "Iconic silhouette, collectible",
     limiter: "Oct–Apr only",
-    outfit: "This is your plaid/flannel/denim uniform boot. Flannel shirt, waxed canvas or wool jacket, straight-leg denim with a slight break. Let the tall moc toe show — no need to cuff heavily.",
+    outfit: "This is your plaid/flannel/denim uniform boot. The JCRT Sunshine Rock Flannel or Carhartt Midweight Plaid, the Iron & Resin Hunter Jacket over top, Dearborn Long Ryder Jeans with a slight break. Let the tall moc toe show — no need to cuff heavily.",
     matchKeywords: ["flannel", "plaid", "waxed canvas", "wool jacket", "denim", "straight-leg", "jeans"],
   },
   {
@@ -80,7 +80,7 @@ export const BOOTS = [
     tags: ["snow-ok", "cold-ok", "wet-ok", "casual"],
     signature: "Winter dominance",
     limiter: "8-month bench time",
-    outfit: "Full winter mode: wool sweater, insulated flannel-lined jacket, midweight denim or canvas pants, wool socks showing at the cuff. This boot is doing the hard work — dress warm around it.",
+    outfit: "Full winter mode: the Warrior Butter Pullover Hoodie or Hammer Made Tomas Crewneck under the Canada Goose Chateau Parka, Dearborn Long Ryder Jeans, wool socks showing at the cuff. This boot is doing the hard work — dress warm around it.",
     matchKeywords: ["wool sweater", "sweater", "flannel jacket", "denim", "canvas pants", "wool socks"],
   },
   {
@@ -94,7 +94,7 @@ export const BOOTS = [
     tags: ["dress", "casual", "wet-ok"],
     signature: "Business/client confidence",
     limiter: "Less casual-brewery",
-    outfit: "Your client-facing outfit: tailored trousers or dark chinos, a button-down, and a sport coat or clean overcoat. Polished but not stiff — this boot carries the whole look.",
+    outfit: "Your client-facing outfit: the Banana Republic Athletic Travel Pant or Big Star Union, a Brooks Brothers Button Down or the Brooks Brothers PBDC Checked Shirt, and a clean overcoat. Polished but not stiff — this boot carries the whole look.",
     matchKeywords: ["tailored trousers", "trousers", "dark chinos", "chinos", "button-down", "button down", "sport coat", "overcoat", "dress shirt"],
   },
   {
@@ -108,7 +108,7 @@ export const BOOTS = [
     tags: ["dress", "statement", "wet-ok"],
     signature: "Iconic, statement-outfit king",
     limiter: "Cap toe vs. slacks",
-    outfit: "Plaid shirt and dark denim, exactly like last night — that's the move. Add a shawl-collar cardigan or field jacket. This is a boot you deploy on purpose, not a daily default.",
+    outfit: "The JCRT London Calling Plaid or Joseph Abboud Grey / Field Tan Plaid with dark Dearborn Long Ryder Jeans — exactly like last night. Add the Iron & Resin Rambler Jacket over top. This is a boot you deploy on purpose, not a daily default.",
     matchKeywords: ["plaid", "dark denim", "denim", "cardigan", "field jacket"],
   },
   {
@@ -122,7 +122,7 @@ export const BOOTS = [
     tags: ["dry-only", "dress", "casual"],
     signature: "Go-to for black, funky-dressy edge",
     limiter: "Black-forward outfits only",
-    outfit: "Your go-to whenever black is the plan. For everyday, black or charcoal denim with a black or grey overshirt, minimal contrast. For a dressier night out, it holds up just as well with tailored black trousers and a blazer — cool-dressy rather than stiff-dressy, which is exactly its lane.",
+    outfit: "Your go-to whenever black is the plan. For everyday, Mugsy Mags in black with the Hammer Made Black / Blue / Red / Grey Plaid worn open as an overshirt, minimal contrast. For a dressier night out, it holds up just as well with tailored black trousers and a blazer — cool-dressy rather than stiff-dressy, which is exactly its lane.",
     matchKeywords: ["black", "charcoal", "denim", "grey overshirt", "gray overshirt", "overshirt", "monochrome", "tailored trousers", "blazer", "funky", "dressy", "cool dressy"],
   },
   {
@@ -136,7 +136,7 @@ export const BOOTS = [
     tags: ["hot-ok", "shorts", "casual", "dry-only"],
     signature: "Shorts-compatible pair",
     limiter: "Warm/dry only",
-    outfit: "A pair that's genuinely fine with shorts: chino or linen shorts, a simple tee or camp collar shirt, no socks showing. Light and low-key — let the Abilene leather catch the light.",
+    outfit: "A pair that's genuinely fine with shorts: 01.algo Performance Shorts or Waggle Shorts, a Kuhl Short Sleeve or Quince Linen Natural up top, no socks showing. Light and low-key — let the Abilene leather catch the light.",
     matchKeywords: ["shorts", "chino shorts", "linen shorts", "linen", "tee", "t-shirt", "camp collar"],
   },
   {
@@ -150,7 +150,7 @@ export const BOOTS = [
     tags: ["hot-ok", "shorts", "casual", "dry-only"],
     signature: "Rising star, favorite leather, shorts-compatible too",
     limiter: "Unproven, less substantial",
-    outfit: "Warm-weather low-key: rolled chinos, lightweight denim, or shorts, with a linen or oxford shirt untucked. This boot wants to look effortless, so don't overdress around it.",
+    outfit: "Warm-weather low-key: Waggle Shorts or rolled Uniqlo Selvedge Jeans, with the Quince Linen Navy or a J.Crew Gauze Chambray worn untucked. This boot wants to look effortless, so don't overdress around it.",
     matchKeywords: ["chinos", "lightweight denim", "denim", "linen", "oxford shirt", "untucked", "shorts"],
   },
   {
@@ -164,7 +164,7 @@ export const BOOTS = [
     tags: ["casual", "dress", "wet-ok"],
     signature: "Business casual switch-up",
     limiter: "Lost \"fresh\" factor",
-    outfit: "A dependable switch-up from the Beckman: dark trousers or raw denim, a knit polo or oxford shirt, unstructured jacket. Understated and reliable, the veteran move.",
+    outfit: "A dependable switch-up from the Beckman: Big Star Union or The Perfect Jean, a Brooks Brothers PBDC Checked Shirt or Marine Layer Corduroy Shirt, the Quince Hybrid Insulated Vest if it's cool. Understated and reliable, the veteran move.",
     matchKeywords: ["dark trousers", "trousers", "raw denim", "denim", "polo", "oxford shirt", "unstructured jacket"],
   },
   {
@@ -178,7 +178,7 @@ export const BOOTS = [
     tags: ["dress", "dry-only", "casual"],
     signature: "Sleek, trend-aligned",
     limiter: "Black + orthotics",
-    outfit: "Slim black or dark indigo denim, a fitted black or white tee, and a longline coat. The Chelsea silhouette wants a clean, minimal outfit built around it.",
+    outfit: "Mugsy Mags in black or slim dark indigo denim, a Marine Layer Banks Tee, and the Canada Goose Chateau Parka over top on a cold night. The Chelsea silhouette wants a clean, minimal outfit built around it.",
     matchKeywords: ["black", "dark indigo denim", "indigo", "denim", "tee", "t-shirt", "white tee", "longline coat", "coat"],
   },
   {
@@ -192,7 +192,7 @@ export const BOOTS = [
     tags: ["dress", "dry-only"],
     signature: "Reliable dress option",
     limiter: "Mental \"postman\" turn-off",
-    outfit: "Reach for this when the occasion is genuinely dressy: dark suit trousers or tailored chinos, a crisp shirt, no tie needed. Classic and safe when you need safe.",
+    outfit: "Reach for this when the occasion is genuinely dressy: the Banana Republic Athletic Travel Pant or tailored chinos, a Brooks Brothers Button Down, no tie needed. Classic and safe when you need safe.",
     matchKeywords: ["suit trousers", "trousers", "tailored chinos", "chinos", "dress shirt", "crisp shirt", "suit", "black"],
   },
   {
@@ -206,7 +206,7 @@ export const BOOTS = [
     tags: ["wet-ok", "snow-ok", "casual", "cold-ok"],
     signature: "Grab-and-go comfort",
     limiter: "Not Heritage, low cool factor",
-    outfit: "Yardwork and errands: whatever's already in the laundry pile. Beat-up denim or work pants and an old flannel — comfort over style is the whole point today.",
+    outfit: "Yardwork and errands: whatever's already in the laundry pile. Dearborn Long Ryder Jeans and the Carhartt Midweight Plaid, or the Carhartt Rain Defender Insulated Vest if it's damp — comfort over style is the whole point today.",
     matchKeywords: ["work pants", "beat-up denim", "denim", "old flannel", "flannel", "hoodie", "sweatpants"],
   },
 ];

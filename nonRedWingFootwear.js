@@ -18,7 +18,7 @@ export const NON_RED_WING_FOOTWEAR = [
     signature: "Preppy warm-weather alternative",
     limiter: "Not a boot — only makes sense on genuinely hot days",
     outfit:
-      "Are you sure you want Red Wings today? On a day this hot, the Birkenstock Kyoto with linen shorts or chinos and a simple polo or camp collar shirt reads preppy and cool without fighting the heat.",
+      "Are you sure you want Red Wings today? On a day this hot, the Birkenstock Kyoto with the Quince Linen Natural shorts or 01.algo Performance Shorts and a Kuhl Short Sleeve reads preppy and cool without fighting the heat.",
     matchKeywords: ["sandals", "birkenstock", "preppy", "linen", "polo", "camp collar", "chinos", "shorts"],
   },
   {
@@ -34,7 +34,7 @@ export const NON_RED_WING_FOOTWEAR = [
     signature: "Casual sneaker alternative",
     limiter: "Not a boot — only makes sense on genuinely hot, casual days",
     outfit:
-      "Are you sure you want Red Wings today? White adidas VL Court sneakers with shorts and a tee is the smarter, cooler move on a day like this.",
+      "Are you sure you want Red Wings today? White adidas VL Court sneakers with Waggle Shorts and a Marine Layer Banks Tee is the smarter, cooler move on a day like this.",
     matchKeywords: ["sneakers", "white sneakers", "adidas", "tee", "t-shirt", "joggers", "shorts", "athleisure"],
   },
   {
@@ -50,7 +50,7 @@ export const NON_RED_WING_FOOTWEAR = [
     signature: "Casual navy sneaker alternative",
     limiter: "Not a boot — only makes sense on genuinely hot, casual days",
     outfit:
-      "Are you sure you want Red Wings today? The adidas Daily 3.0 in navy is a clean, low-key sneaker for a laid-back hot day — jeans or shorts and a simple tee, nothing more needed.",
+      "Are you sure you want Red Wings today? The adidas Daily 3.0 in navy is a clean, low-key sneaker for a laid-back hot day — Dearborn Long Ryder Jeans or shorts and the Marine Layer Banks Tee, nothing more needed.",
     matchKeywords: ["sneakers", "navy sneakers", "adidas", "tee", "t-shirt", "jeans", "shorts", "casual"],
   },
 ];

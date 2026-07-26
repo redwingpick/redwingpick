@@ -6,6 +6,7 @@
   --bg: #ffffff;
   --bg-soft: #f4f4f4;
   --border: #e2e2e2;
+  --on-dark-muted: #a9adb4;
 }
 
 * {
@@ -43,37 +44,41 @@ body {
   position: relative;
   z-index: 1;
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 14px;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 28px 40px 14px;
-  border-bottom: 1px solid var(--border);
+  align-items: center;
+  padding: 22px 40px;
+  background: var(--ink);
 }
 
 .title-block h1 {
-  font-size: 1.7rem;
-  font-weight: 800;
+  font-size: clamp(1.15rem, 4vw, 2rem);
+  font-weight: 900;
   margin: 0;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: #ffffff;
+  line-height: 1.1;
 }
 
 .weather-block {
   text-align: right;
   line-height: 1.1;
+  margin-left: auto;
 }
 
 .temp {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 800;
-  color: var(--ink);
+  color: #ffffff;
 }
 
 .temp .hi-lo {
   display: block;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--on-dark-muted);
   margin-top: 4px;
   letter-spacing: 0.02em;
 }
@@ -81,7 +86,7 @@ body {
 .city {
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--muted);
+  color: var(--on-dark-muted);
   margin-top: 4px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -242,7 +247,10 @@ main {
 
 @media (max-width: 760px) {
   .top-bar {
-    padding: 20px 20px 12px;
+    padding: 18px 20px;
+  }
+  .temp {
+    font-size: 2rem;
   }
   main {
     padding: 10px 20px 40px;

@@ -27,7 +27,7 @@ function showError(message) {
 
 function renderTitleDate() {
   const dateStr = new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" });
-  pageTitle.textContent = `Red Wing Pick for ${dateStr}`;
+  pageTitle.textContent = `Red Wings for ${dateStr}`;
 }
 
 // Remembers yesterday's #1 pick (per browser/device — there's no shared
