@@ -29,6 +29,29 @@ function isBlackOrGreyLeather(boot) {
   return leather.includes("black") || leather.includes("grey") || leather.includes("gray");
 }
 
+// Shared signal detection so the Netlify Function (AI path) can enforce the
+// hard "over 80°F -> Birkenstock" rule deterministically instead of relying
+// on the model's free-form judgment, which doesn't reliably follow a strict
+// threshold rule on its own.
+export function analyzeOutfitSignals(rawText, weather) {
+  const text = rawText.trim().toLowerCase();
+  const shortsSignal = SHORTS_PATTERN.test(text);
+  const dressySignal = DRESSY_PATTERN.test(text);
+  const blackOutfitSignal = BLACK_OUTFIT_PATTERN.test(text);
+  const athleticSignal = ATHLETIC_PATTERN.test(text);
+  const smartCasualShorts = shortsSignal && !athleticSignal && dressySignal && !blackOutfitSignal;
+  const birkenstockWeather = weather && weather.highF > BIRKENSTOCK_SHORTS_THRESHOLD_F;
+  return {
+    shortsSignal,
+    dressySignal,
+    blackOutfitSignal,
+    athleticSignal,
+    smartCasualShorts,
+    birkenstockWeather,
+    shouldForceBirkenstock: smartCasualShorts && birkenstockWeather,
+  };
+}
+
 // Keywords shared by most boots (e.g. "denim") barely tell pairs apart; rare,
 // specific ones (e.g. "field jacket") do. Weight each keyword by how many
 // boots in the pool actually carry it, so specificity beats generic overlap.
@@ -59,15 +82,17 @@ export function matchOutfitToBoot(boots, month, rawText, weather) {
   const pool = reallyReallyHot ? [...basePool, ...NON_RED_WING_FOOTWEAR] : basePool;
   const keywordWeights = buildKeywordWeights(pool);
 
-  const dressySignal = DRESSY_PATTERN.test(text);
   const casualSignal = CASUAL_PATTERN.test(text);
-  const shortsSignal = SHORTS_PATTERN.test(text);
-  const blackOutfitSignal = BLACK_OUTFIT_PATTERN.test(text);
-  const athleticSignal = ATHLETIC_PATTERN.test(text);
   const shortSleeveSignal = SHORT_SLEEVE_PATTERN.test(text);
   const longSleeveSignal = LONG_SLEEVE_PATTERN.test(text);
-  const smartCasualShorts = shortsSignal && !athleticSignal && dressySignal && !blackOutfitSignal;
-  const birkenstockWeather = weather && weather.highF > BIRKENSTOCK_SHORTS_THRESHOLD_F;
+  const {
+    shortsSignal,
+    dressySignal,
+    blackOutfitSignal,
+    athleticSignal,
+    smartCasualShorts,
+    birkenstockWeather,
+  } = analyzeOutfitSignals(rawText, weather);
 
   const scored = pool.map((boot) => {
     let score = 0;

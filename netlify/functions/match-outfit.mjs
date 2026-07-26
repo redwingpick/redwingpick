@@ -5,6 +5,7 @@
 import { BOOTS } from "../../boots.js";
 import { WARDROBE } from "../../wardrobe.js";
 import { NON_RED_WING_FOOTWEAR } from "../../nonRedWingFootwear.js";
+import { analyzeOutfitSignals } from "../../outfitMatch.js";
 
 const MODEL = "claude-haiku-4-5-20251001";
 const MAX_OUTFIT_LENGTH = 500;
@@ -77,6 +78,23 @@ export default async (req) => {
       status: 400,
       headers: { "content-type": "application/json" },
     });
+  }
+
+  // The ">80°F -> Birkenstock" rule is a hard threshold, not a fuzzy
+  // preference — the model doesn't reliably hold a strict cutoff on its own
+  // (it'll reason its way to keeping a boot "since it's hot enough to still
+  // work"). Enforce it deterministically instead of trusting free-form
+  // judgment for this one case.
+  const signals = analyzeOutfitSignals(outfitText, { highF });
+  if (signals.shouldForceBirkenstock) {
+    const birkenstock = NON_RED_WING_FOOTWEAR.find((item) => item.id === "birkenstock-kyoto");
+    return new Response(
+      JSON.stringify({
+        bootId: "birkenstock-kyoto",
+        reasoning: `At ${highF}°F it's genuinely hot enough that the Birkenstock Kyoto beats another boot for a smart-casual shorts outfit like this — ${birkenstock.signature.toLowerCase()}.`,
+      }),
+      { status: 200, headers: { "content-type": "application/json" } }
+    );
   }
 
   const catalog = buildCatalog(month, highF);
